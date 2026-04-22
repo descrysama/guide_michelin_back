@@ -3,6 +3,7 @@ import { RestaurantRepository } from './restaurant.repository';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { RestaurantQueryDto } from './dto/restaurant-query.dto';
+import { AlongRouteDto } from './dto/along-route.dto';
 
 @Injectable()
 export class RestaurantService {
@@ -10,6 +11,10 @@ export class RestaurantService {
 
   findAll(query: RestaurantQueryDto) {
     return this.restaurantRepository.findAll(query);
+  }
+
+  findAlongRoute(dto: AlongRouteDto) {
+    return this.restaurantRepository.findAlongRoute(dto);
   }
 
   async findOne(id: string) {

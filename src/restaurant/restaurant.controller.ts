@@ -16,6 +16,7 @@ import { RestaurantService } from './restaurant.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { RestaurantQueryDto } from './dto/restaurant-query.dto';
+import { AlongRouteDto } from './dto/along-route.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('restaurants')
@@ -26,6 +27,11 @@ export class RestaurantController {
   @Get()
   findAll(@Query() query: RestaurantQueryDto) {
     return this.restaurantService.findAll(query);
+  }
+
+  @Post('along-route')
+  findAlongRoute(@Body() dto: AlongRouteDto) {
+    return this.restaurantService.findAlongRoute(dto);
   }
 
   @Get(':id')
