@@ -208,6 +208,120 @@ const restaurants: RestaurantSeed[] = [
     ] satisfies Horaire[],
   },
 
+  // ─── Beaune & alentours (Côte-d'Or) ─────────────────────────
+  {
+    nom: 'Maison Lameloise',
+    adresse: '36 Place d\'Armes, 71150 Chagny',
+    distinction: 3,
+    latitude: 46.9144,
+    longitude: 4.7442,
+    imageUrls: [
+      'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800',
+      'https://images.unsplash.com/photo-1544025162-d76694265947?w=800',
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800',
+    ],
+    horaires: [
+      { jour: 'MERCREDI', creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'JEUDI',    creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'VENDREDI', creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'SAMEDI',   creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'DIMANCHE', creneaux: [{ ouverture: '12:00', fermeture: '13:30' }] },
+    ] satisfies Horaire[],
+  },
+  {
+    nom: 'Loiseau des Vignes',
+    adresse: '31 Rue Maufoux, 21200 Beaune',
+    distinction: 1,
+    latitude: 47.0241,
+    longitude: 4.8383,
+    imageUrls: [
+      'https://images.unsplash.com/photo-1590846406792-0adc7f938f1d?w=800',
+      'https://images.unsplash.com/photo-1579027989536-b7b1f875659b?w=800',
+    ],
+    horaires: [
+      { jour: 'LUNDI',    creneaux: [{ ouverture: '12:00', fermeture: '14:00' }, { ouverture: '19:00', fermeture: '21:30' }] },
+      { jour: 'MARDI',    creneaux: [{ ouverture: '12:00', fermeture: '14:00' }, { ouverture: '19:00', fermeture: '21:30' }] },
+      { jour: 'MERCREDI', creneaux: [{ ouverture: '12:00', fermeture: '14:00' }, { ouverture: '19:00', fermeture: '21:30' }] },
+      { jour: 'JEUDI',    creneaux: [{ ouverture: '12:00', fermeture: '14:00' }, { ouverture: '19:00', fermeture: '21:30' }] },
+      { jour: 'VENDREDI', creneaux: [{ ouverture: '12:00', fermeture: '14:00' }, { ouverture: '19:00', fermeture: '21:30' }] },
+      { jour: 'SAMEDI',   creneaux: [{ ouverture: '12:00', fermeture: '14:00' }, { ouverture: '19:00', fermeture: '21:30' }] },
+      { jour: 'DIMANCHE', creneaux: [{ ouverture: '12:00', fermeture: '14:00' }] },
+    ] satisfies Horaire[],
+  },
+  {
+    nom: 'Le Bénaton',
+    adresse: '25 Faubourg Bretonnière, 21200 Beaune',
+    distinction: 1,
+    latitude: 47.0258,
+    longitude: 4.8456,
+    imageUrls: [
+      'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800',
+      'https://images.unsplash.com/photo-1551882547-ff40c4c5d09a?w=800',
+    ],
+    horaires: [
+      { jour: 'MARDI',    creneaux: [{ ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'MERCREDI', creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'JEUDI',    creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'VENDREDI', creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'SAMEDI',   creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:30' }] },
+    ] satisfies Horaire[],
+  },
+  {
+    nom: 'Le Jardin des Remparts',
+    adresse: '10 Rue de l\'Hôtel-Dieu, 21200 Beaune',
+    distinction: 1,
+    latitude: 47.0271,
+    longitude: 4.8368,
+    imageUrls: [
+      'https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?w=800',
+      'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800',
+    ],
+    horaires: [
+      { jour: 'MERCREDI', creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'JEUDI',    creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'VENDREDI', creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'SAMEDI',   creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:30' }] },
+    ] satisfies Horaire[],
+  },
+  {
+    nom: 'Hostellerie de Levernois',
+    adresse: 'Route de Combertault, 21200 Levernois',
+    distinction: 1,
+    latitude: 47.0035,
+    longitude: 4.8698,
+    imageUrls: [
+      'https://images.unsplash.com/photo-1544025162-d76694265947?w=800',
+      'https://images.unsplash.com/photo-1590846406792-0adc7f938f1d?w=800',
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800',
+    ],
+    horaires: [
+      { jour: 'LUNDI',    creneaux: [{ ouverture: '12:00', fermeture: '14:00' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'MARDI',    creneaux: [{ ouverture: '12:00', fermeture: '14:00' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'MERCREDI', creneaux: [{ ouverture: '12:00', fermeture: '14:00' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'JEUDI',    creneaux: [{ ouverture: '12:00', fermeture: '14:00' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'VENDREDI', creneaux: [{ ouverture: '12:00', fermeture: '14:00' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'SAMEDI',   creneaux: [{ ouverture: '12:00', fermeture: '14:00' }, { ouverture: '19:30', fermeture: '21:30' }] },
+      { jour: 'DIMANCHE', creneaux: [{ ouverture: '12:00', fermeture: '14:00' }] },
+    ] satisfies Horaire[],
+  },
+  {
+    nom: 'Le Charlemagne',
+    adresse: 'Route des Vergelesses, 21420 Pernand-Vergelesses',
+    distinction: 1,
+    latitude: 47.0785,
+    longitude: 4.8426,
+    imageUrls: [
+      'https://images.unsplash.com/photo-1579027989536-b7b1f875659b?w=800',
+      'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800',
+    ],
+    horaires: [
+      { jour: 'JEUDI',    creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:00' }] },
+      { jour: 'VENDREDI', creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:00' }] },
+      { jour: 'SAMEDI',   creneaux: [{ ouverture: '12:00', fermeture: '13:30' }, { ouverture: '19:30', fermeture: '21:00' }] },
+      { jour: 'DIMANCHE', creneaux: [{ ouverture: '12:00', fermeture: '13:30' }] },
+    ] satisfies Horaire[],
+  },
+
   // ─── Mâcon & alentours ───────────────────────────────────────
   {
     nom: 'Georges Blanc',
