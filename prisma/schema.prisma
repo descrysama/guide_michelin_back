@@ -1,8 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,30 +11,31 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(cuid())
-  prenom      String
-  nom         String
-  email       String   @unique
-  password    String
-  phoneNumber String?
-  aboutMe     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  preference  UserPreference?
-  favorites   UserDishFavorite[]
+  id                  String                   @id @default(cuid())
+  prenom              String
+  nom                 String
+  email               String                   @unique
+  password            String
+  phoneNumber         String?
+  aboutMe             String?
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+  preference          UserPreference?
+  favorites           UserDishFavorite[]
+  restaurantFavorites UserRestaurantFavorite[]
+  hotelFavorites      UserHotelFavorite[]
 
   @@map("users")
 }
 
-<<<<<<< HEAD
 model UserPreference {
-  userId               String   @id
-  veganOnly            Boolean  @default(false)
-  excludedIngredients  String   @default("[]")
-  allergens            String   @default("[]")
-  excludedTags         String   @default("[]")
-  updatedAt            DateTime @updatedAt
-  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String   @id
+  veganOnly           Boolean  @default(false)
+  excludedIngredients String   @default("[]")
+  allergens           String   @default("[]")
+  excludedTags        String   @default("[]")
+  updatedAt           DateTime @updatedAt
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_preferences")
 }
@@ -45,6 +44,7 @@ model UserDishFavorite {
   id                String   @id @default(cuid())
   userId            String
   dishId            String
+  restaurantId      String?
   dishTitle         String
   dishCaption       String
   dishImage         String
@@ -60,18 +60,61 @@ model UserDishFavorite {
 
   @@unique([userId, dishId])
   @@map("user_dish_favorites")
-=======
+}
+
+model UserRestaurantFavorite {
+  id                String     @id @default(cuid())
+  userId            String
+  restaurantId      String
+  restaurantName    String
+  restaurantImage   String?
+  restaurantAddress String
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  user              User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  restaurant        Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, restaurantId])
+  @@map("user_restaurant_favorites")
+}
+
+model UserHotelFavorite {
+  id                String   @id @default(cuid())
+  userId            String
+  hotelKey          String
+  hotelName         String
+  hotelImage        String
+  hotelUrl          String
+  hotelLocationSlug String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, hotelKey])
+  @@map("user_hotel_favorites")
+}
+
 model Restaurant {
-  id          String              @id @default(cuid())
-  nom         String
-  imageUrls   String              // JSON array of URL strings
-  adresse     String
-  distinction Int                 // 1, 2 or 3 (étoiles Michelin)
-  latitude    Float?
-  longitude   Float?
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
-  horaires    RestaurantHoraire[]
+  id               String                   @id @default(cuid())
+  nom              String
+  imageUrls        String // JSON array of URL strings
+  adresse          String
+  distinction      Int // 1, 2 or 3 (etoiles Michelin)
+  latitude         Float?
+  longitude        Float?
+  ville            String?
+  pays             String?
+  cuisineType      String?
+  priceRange       String?
+  michelinSlug     String?                  @unique
+  sourceUrl        String?
+  sourceHotelName  String?
+  sourceAttributes String                   @default("{}") // JSON object with extra scraped metadata
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+  horaires         RestaurantHoraire[]
+  dishes           Dish[]
+  favoritedByUsers UserRestaurantFavorite[]
 
   @@map("restaurants")
 }
@@ -81,9 +124,33 @@ model RestaurantHoraire {
   restaurantId String
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   jour         String // LUNDI | MARDI | MERCREDI | JEUDI | VENDREDI | SAMEDI | DIMANCHE
-  creneaux     String     // JSON array: [{ouverture: "12:00", fermeture: "14:30"}, ...]
+  creneaux     String // JSON array: [{ouverture: "12:00", fermeture: "14:30"}, ...]
 
   @@unique([restaurantId, jour])
   @@map("restaurant_horaires")
->>>>>>> 72349979ab453f8b17226ca0ac476e5208418ea2
+}
+
+model Dish {
+  id           String     @id @default(cuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  sourceKey    String     @unique // stable id used by the front favorites flow
+  title        String
+  caption      String
+  imageUrl     String
+  cuisine      String
+  mood         String
+  budget       String
+  prepTime     Int
+  vegan        Boolean    @default(false)
+  ingredients  String     @default("[]") // JSON string[]
+  allergens    String     @default("[]") // JSON string[]
+  tags         String     @default("[]") // JSON string[]
+  sourceUrl    String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([restaurantId])
+  @@index([cuisine])
+  @@map("dishes")
 }

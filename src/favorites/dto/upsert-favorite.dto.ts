@@ -12,7 +12,7 @@ export class UpsertFavoriteDto {
   @IsNotEmpty()
   dishTitle!: string;
 
-  @ApiProperty({ example: 'Bouillon longuement réduit, noodles fraîches, œuf mariné' })
+  @ApiProperty({ example: 'Bouillon longuement rÃƒÂ©duit, noodles fraÃƒÂ®ches, Ã…â€œuf marinÃƒÂ©' })
   @IsString()
   @IsNotEmpty()
   dishCaption!: string;
@@ -31,6 +31,16 @@ export class UpsertFavoriteDto {
   @IsString()
   @IsNotEmpty()
   restaurantName!: string;
+
+  @ApiPropertyOptional({ example: 'clu123abc0000xyz' })
+  @IsOptional()
+  @IsString()
+  restaurantId?: string;
+
+  @ApiPropertyOptional({ example: 'clu123abc0000xyz' })
+  @IsOptional()
+  @IsString()
+  restaurantI?: string;
 
   @ApiProperty({ example: '12 rue des Halles, Paris' })
   @IsString()
