@@ -25,3 +25,29 @@ model User {
 
   @@map("users")
 }
+
+model Restaurant {
+  id          String              @id @default(cuid())
+  nom         String
+  imageUrls   String              // JSON array of URL strings
+  adresse     String
+  distinction Int                 // 1, 2 or 3 (étoiles Michelin)
+  latitude    Float?
+  longitude   Float?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  horaires    RestaurantHoraire[]
+
+  @@map("restaurants")
+}
+
+model RestaurantHoraire {
+  id           String     @id @default(cuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  jour         String // LUNDI | MARDI | MERCREDI | JEUDI | VENDREDI | SAMEDI | DIMANCHE
+  creneaux     String     // JSON array: [{ouverture: "12:00", fermeture: "14:30"}, ...]
+
+  @@unique([restaurantId, jour])
+  @@map("restaurant_horaires")
+}
