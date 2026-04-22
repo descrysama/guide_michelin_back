@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+﻿import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import type { Response } from 'express';
 import type { User } from '@prisma/client';
+import type { Response } from 'express';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UserService } from '../user/user.service';
 
@@ -26,7 +26,7 @@ export class AuthService {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     return { user };
@@ -37,9 +37,13 @@ export class AuthService {
     return { message: 'Déconnexion réussie' };
   }
 
-  async getProfile(userId: string): Promise<Omit<User, 'password'>> {
+  async getProfile(userId: string): Promise<any> {
     const user = await this.userService.findById(userId);
+    const preferences = await this.userService.getPreferences(userId);
     const { password, ...result } = user;
-    return result;
+    return {
+      ...result,
+      preferences,
+    };
   }
 }

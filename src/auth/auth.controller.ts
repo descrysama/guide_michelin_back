@@ -3,14 +3,19 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nes
 import type { Request, Response } from 'express';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginUserDto } from '../user/dto/login-user.dto';
+import { UpdateUserPreferencesDto } from '../user/dto/update-user-preferences.dto';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { UserService } from '../user/user.service';
 
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+  ) {}
 
   @Post('register')
   @ApiOperation({ summary: 'Register a new user' })
@@ -50,5 +55,26 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getProfile(@Req() req: Request) {
     return this.authService.getProfile((req.user as any).id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('preferences')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get user food preferences' })
+  @ApiResponse({ status: 200, description: 'User preferences retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getPreferences(@Req() req: Request) {
+    return this.userService.getPreferences((req.user as any).id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('preferences')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Save user food preferences' })
+  @ApiResponse({ status: 200, description: 'User preferences saved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiBody({ type: UpdateUserPreferencesDto })
+  async updatePreferences(@Req() req: Request, @Body(ValidationPipe) dto: UpdateUserPreferencesDto) {
+    return this.userService.updatePreferences((req.user as any).id, dto);
   }
 }

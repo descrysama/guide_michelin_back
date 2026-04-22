@@ -1,7 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import * as bcrypt from 'bcryptjs';
+﻿import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import type { User } from '@prisma/client';
+import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserPreferencesDto } from './dto/update-user-preferences.dto';
 import { UserRepository } from './user.repository';
 
 @Injectable()
@@ -36,9 +37,24 @@ export class UserService {
 
   async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.findByEmail(email);
-    if (user && await bcrypt.compare(password, user.password)) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       return user;
     }
     return null;
+  }
+
+  async getPreferences(userId: string) {
+    await this.findById(userId);
+    return this.userRepository.getPreferences(userId);
+  }
+
+  async updatePreferences(userId: string, dto: UpdateUserPreferencesDto) {
+    await this.findById(userId);
+    return this.userRepository.updatePreferences(userId, {
+      veganOnly: dto.veganOnly ?? false,
+      excludedIngredients: (dto.excludedIngredients ?? []).map((item) => item.trim()).filter(Boolean),
+      allergens: (dto.allergens ?? []).map((item) => item.trim()).filter(Boolean),
+      excludedTags: (dto.excludedTags ?? []).map((item) => item.trim()).filter(Boolean),
+    });
   }
 }

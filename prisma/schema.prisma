@@ -22,6 +22,41 @@ model User {
   aboutMe     String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  preference  UserPreference?
+  favorites   UserDishFavorite[]
 
   @@map("users")
+}
+
+model UserPreference {
+  userId               String   @id
+  veganOnly            Boolean  @default(false)
+  excludedIngredients  String   @default("[]")
+  allergens            String   @default("[]")
+  excludedTags         String   @default("[]")
+  updatedAt            DateTime @updatedAt
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+model UserDishFavorite {
+  id                String   @id @default(cuid())
+  userId            String
+  dishId            String
+  dishTitle         String
+  dishCaption       String
+  dishImage         String
+  dishCuisine       String
+  restaurantName    String
+  restaurantAddress String
+  restaurantHours   String
+  restaurantPhone   String?
+  expiresAt         DateTime
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dishId])
+  @@map("user_dish_favorites")
 }
