@@ -3,7 +3,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Dépendances système pour compiler better-sqlite3 / sqlite3 natifs
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache python3 make g++ openssl
 
 COPY package*.json ./
 RUN npm ci
@@ -20,7 +20,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Besoin des outils de build pour réinstaller les deps natives en prod
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache python3 make g++ openssl
 
 COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
