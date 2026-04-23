@@ -22,11 +22,10 @@ export class AuthService {
     const payload = { email: user.email, sub: user.id };
     const token = this.jwtService.sign(payload);
 
-    const isProd = process.env.NODE_ENV === 'production';
     response.cookie('access_token', token, {
       httpOnly: true,
-      secure: isProd,
-      sameSite: isProd ? 'none' : 'lax',
+      secure: true,
+      sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -34,11 +33,10 @@ export class AuthService {
   }
 
   async logout(response: Response): Promise<{ message: string }> {
-    const isProd = process.env.NODE_ENV === 'production';
     response.clearCookie('access_token', {
       httpOnly: true,
-      secure: isProd,
-      sameSite: isProd ? 'none' : 'lax',
+      secure: true,
+      sameSite: 'none',
     });
     return { message: 'Déconnexion réussie' };
   }
