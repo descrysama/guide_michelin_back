@@ -24,8 +24,8 @@ export class AuthService {
 
     response.cookie('access_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: true,
+      sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -33,7 +33,11 @@ export class AuthService {
   }
 
   async logout(response: Response): Promise<{ message: string }> {
-    response.clearCookie('access_token');
+    response.clearCookie('access_token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+    });
     return { message: 'Déconnexion réussie' };
   }
 
