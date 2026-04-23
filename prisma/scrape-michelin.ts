@@ -49,23 +49,23 @@ function htmlDecode(input: string): string {
     .replace(/&#39;/g, "'")
     .replace(/&apos;/g, "'")
     .replace(/&nbsp;/g, ' ')
-    .replace(/&eacute;/g, 'é')
-    .replace(/&egrave;/g, 'è')
-    .replace(/&ecirc;/g, 'ê')
-    .replace(/&agrave;/g, 'à')
-    .replace(/&ccedil;/g, 'ç')
-    .replace(/&ocirc;/g, 'ô')
-    .replace(/&ucirc;/g, 'û')
-    .replace(/&icirc;/g, 'î')
-    .replace(/&uuml;/g, 'ü')
-    .replace(/&ouml;/g, 'ö')
-    .replace(/&auml;/g, 'ä')
+    .replace(/&eacute;/g, '�')
+    .replace(/&egrave;/g, '�')
+    .replace(/&ecirc;/g, '�')
+    .replace(/&agrave;/g, '�')
+    .replace(/&ccedil;/g, '�')
+    .replace(/&ocirc;/g, '�')
+    .replace(/&ucirc;/g, '�')
+    .replace(/&icirc;/g, '�')
+    .replace(/&uuml;/g, '�')
+    .replace(/&ouml;/g, '�')
+    .replace(/&auml;/g, '�')
     .replace(/&ndash;/g, '-')
     .replace(/&mdash;/g, '-')
-    .replace(/&rsquo;/g, '’')
-    .replace(/&lsquo;/g, '‘')
-    .replace(/&ldquo;/g, '“')
-    .replace(/&rdquo;/g, '”')
+    .replace(/&rsquo;/g, '�')
+    .replace(/&lsquo;/g, '�')
+    .replace(/&ldquo;/g, '�')
+    .replace(/&rdquo;/g, '�')
     .replace(/&#(\d+);/g, (_, num) => String.fromCharCode(Number(num)));
 }
 
@@ -122,9 +122,9 @@ function parseCard(card: string): ScrapedRestaurant | null {
   const scoreBlocks = [...card.matchAll(/<div class="card__menu-footer--score pl-text\s*">([\s\S]*?)<\/div>/gi)];
   const scoreText = stripTags(scoreBlocks[1]?.[1] ?? '');
 
-  const priceMatch = scoreText.match(/[€$£¥]{1,4}/);
-  const priceRange = priceMatch?.[0] ?? '€€';
-  const cuisineType = scoreText.replace(/[€$£¥]{1,4}/g, '').replace(/·/g, '').trim() || 'Cuisine gastronomique';
+  const priceMatch = scoreText.match(/[�$��]{1,4}/);
+  const priceRange = priceMatch?.[0] ?? '��';
+  const cuisineType = scoreText.replace(/[�$��]{1,4}/g, '').replace(/�/g, '').trim() || 'Cuisine gastronomique';
 
   const latMatch = card.match(/data-lat="([^"]+)"/i);
   const lngMatch = card.match(/data-lng="([^"]+)"/i);
@@ -138,7 +138,7 @@ function parseCard(card: string): ScrapedRestaurant | null {
   const dtmCity = card.match(/data-dtm-city="([^"]*)"/i)?.[1] ?? '';
   const dtmPrice = card.match(/data-dtm-price="([^"]*)"/i)?.[1] ?? '';
 
-  const adresse = [ville, pays].filter(Boolean).join(', ') || locationRaw || 'Adresse non communiquée';
+  const adresse = [ville, pays].filter(Boolean).join(', ') || locationRaw || 'Adresse non communiqu�e';
 
   return {
     slug,
@@ -193,11 +193,11 @@ function pick<T>(items: T[], seed: number, indexOffset = 0): T {
 }
 
 function budgetFromPriceRange(priceRange: string): string {
-  const len = priceRange.replace(/[^€$£¥]/g, '').length;
-  if (len >= 4) return '€€€';
-  if (len === 3) return '€€€';
-  if (len === 2) return '€€';
-  return '€';
+  const len = priceRange.replace(/[^�$��]/g, '').length;
+  if (len >= 4) return '���';
+  if (len === 3) return '���';
+  if (len === 2) return '��';
+  return '�';
 }
 
 function cuisineTemplates(cuisineType: string): DishTemplate[] {
@@ -207,42 +207,42 @@ function cuisineTemplates(cuisineType: string): DishTemplate[] {
     return [
       {
         title: 'Nigiri Omakase',
-        caption: 'Sélection du chef autour des meilleurs poissons du jour.',
+        caption: 'S�lection du chef autour des meilleurs poissons du jour.',
         mood: 'Date',
         vegan: false,
         ingredients: ['riz', 'poisson', 'vinaigre', 'algues'],
         allergens: ['poisson'],
-        tags: ['Signature', 'Précis'],
+        tags: ['Signature', 'Pr�cis'],
         prepTimeRange: [18, 30],
       },
       {
         title: 'Ramen Umami',
-        caption: 'Bouillon longuement infusé et garnitures de saison.',
+        caption: 'Bouillon longuement infus� et garnitures de saison.',
         mood: 'Comfort',
         vegan: false,
         ingredients: ['nouilles', 'bouillon', 'soja', 'oignon nouveau'],
         allergens: ['gluten', 'soja'],
-        tags: ['Réconfort', 'Umami'],
+        tags: ['R�confort', 'Umami'],
         prepTimeRange: [20, 35],
       },
       {
-        title: 'Tempura de Légumes',
+        title: 'Tempura de L�gumes',
         caption: 'Beignets ultra-croustillants servis avec sauce tentsuyu.',
         mood: 'Festif',
         vegan: true,
-        ingredients: ['légumes', 'farine', 'eau gazeuse'],
+        ingredients: ['l�gumes', 'farine', 'eau gazeuse'],
         allergens: ['gluten'],
-        tags: ['Croustillant', 'À partager'],
+        tags: ['Croustillant', '� partager'],
         prepTimeRange: [12, 20],
       },
       {
-        title: 'Donburi Végétal',
-        caption: 'Bol complet aux légumes grillés et marinade miso.',
+        title: 'Donburi V�g�tal',
+        caption: 'Bol complet aux l�gumes grill�s et marinade miso.',
         mood: 'Healthy',
         vegan: true,
-        ingredients: ['riz', 'miso', 'légumes', 'sésame'],
-        allergens: ['soja', 'sésame'],
-        tags: ['Vegan', 'Équilibré'],
+        ingredients: ['riz', 'miso', 'l�gumes', 's�same'],
+        allergens: ['soja', 's�same'],
+        tags: ['Vegan', '�quilibr�'],
         prepTimeRange: [15, 25],
       },
     ];
@@ -251,7 +251,7 @@ function cuisineTemplates(cuisineType: string): DishTemplate[] {
   if (normalized.includes('ital')) {
     return [
       {
-        title: 'Risotto Crémeux',
+        title: 'Risotto Cr�meux',
         caption: 'Cuisson minute, texture fondante et finale parmesan.',
         mood: 'Date',
         vegan: false,
@@ -262,30 +262,30 @@ function cuisineTemplates(cuisineType: string): DishTemplate[] {
       },
       {
         title: 'Tagliatelle Maison',
-        caption: 'Pâtes fraîches du jour et réduction de tomates confites.',
+        caption: 'P�tes fra�ches du jour et r�duction de tomates confites.',
         mood: 'Comfort',
         vegan: false,
-        ingredients: ['farine', 'œuf', 'tomate', 'basilic'],
-        allergens: ['gluten', 'œuf'],
+        ingredients: ['farine', '�uf', 'tomate', 'basilic'],
+        allergens: ['gluten', '�uf'],
         tags: ['Maison', 'Tradition'],
         prepTimeRange: [20, 32],
       },
       {
-        title: 'Carpaccio de Légumes',
-        caption: 'Assortiment cru, huile d’olive et agrumes.',
+        title: 'Carpaccio de L�gumes',
+        caption: 'Assortiment cru, huile d�olive et agrumes.',
         mood: 'Fresh',
         vegan: true,
-        ingredients: ['courgette', 'fenouil', 'huile d’olive', 'citron'],
+        ingredients: ['courgette', 'fenouil', 'huile d�olive', 'citron'],
         allergens: [],
-        tags: ['Vegan', 'Fraîcheur'],
+        tags: ['Vegan', 'Fra�cheur'],
         prepTimeRange: [10, 18],
       },
       {
         title: 'Gnocchi Truffe Noire',
-        caption: 'Gnocchi moelleux nappés d’une sauce légère à la truffe.',
+        caption: 'Gnocchi moelleux napp�s d�une sauce l�g�re � la truffe.',
         mood: 'Festif',
         vegan: false,
-        ingredients: ['pomme de terre', 'farine', 'truffe', 'crème'],
+        ingredients: ['pomme de terre', 'farine', 'truffe', 'cr�me'],
         allergens: ['gluten', 'lait'],
         tags: ['Premium', 'Convivial'],
         prepTimeRange: [18, 28],
@@ -293,44 +293,44 @@ function cuisineTemplates(cuisineType: string): DishTemplate[] {
     ];
   }
 
-  if (normalized.includes('végét') || normalized.includes('vegan')) {
+  if (normalized.includes('v�g�t') || normalized.includes('vegan')) {
     return [
       {
         title: 'Assiette Verte Signature',
-        caption: 'Légumes rôtis, herbes fraîches et sauce aux graines.',
+        caption: 'L�gumes r�tis, herbes fra�ches et sauce aux graines.',
         mood: 'Healthy',
         vegan: true,
-        ingredients: ['légumes', 'graines', 'huile d’olive'],
-        allergens: ['sésame'],
-        tags: ['Vegan', 'Équilibré'],
+        ingredients: ['l�gumes', 'graines', 'huile d�olive'],
+        allergens: ['s�same'],
+        tags: ['Vegan', '�quilibr�'],
         prepTimeRange: [14, 24],
       },
       {
         title: 'Curry Doux de Saison',
-        caption: 'Coco léger, épices douces et riz parfumé.',
+        caption: 'Coco l�ger, �pices douces et riz parfum�.',
         mood: 'Comfort',
         vegan: true,
-        ingredients: ['légumes', 'lait de coco', 'riz', 'épices'],
+        ingredients: ['l�gumes', 'lait de coco', 'riz', '�pices'],
         allergens: [],
-        tags: ['Réconfort', 'Épicé'],
+        tags: ['R�confort', '�pic�'],
         prepTimeRange: [18, 30],
       },
       {
-        title: 'Tofu Grillé Miso',
-        caption: 'Marinade umami et légumes croquants.',
+        title: 'Tofu Grill� Miso',
+        caption: 'Marinade umami et l�gumes croquants.',
         mood: 'Fresh',
         vegan: true,
-        ingredients: ['tofu', 'miso', 'brocoli', 'sésame'],
-        allergens: ['soja', 'sésame'],
-        tags: ['Protéiné', 'Léger'],
+        ingredients: ['tofu', 'miso', 'brocoli', 's�same'],
+        allergens: ['soja', 's�same'],
+        tags: ['Prot�in�', 'L�ger'],
         prepTimeRange: [12, 22],
       },
       {
-        title: 'Tarte Fine Potagère',
-        caption: 'Pâte croustillante et assortiment de légumes confits.',
+        title: 'Tarte Fine Potag�re',
+        caption: 'P�te croustillante et assortiment de l�gumes confits.',
         mood: 'Family',
         vegan: true,
-        ingredients: ['farine', 'légumes', 'huile d’olive'],
+        ingredients: ['farine', 'l�gumes', 'huile d�olive'],
         allergens: ['gluten'],
         tags: ['Convivial', 'Saisonnier'],
         prepTimeRange: [20, 30],
@@ -342,27 +342,27 @@ function cuisineTemplates(cuisineType: string): DishTemplate[] {
     return [
       {
         title: 'Tartare de Bar',
-        caption: 'Découpe fine, agrumes et huile verte.',
+        caption: 'D�coupe fine, agrumes et huile verte.',
         mood: 'Fresh',
         vegan: false,
-        ingredients: ['bar', 'citron', 'herbes', 'échalote'],
+        ingredients: ['bar', 'citron', 'herbes', '�chalote'],
         allergens: ['poisson'],
-        tags: ['Fraîcheur', 'Signature'],
+        tags: ['Fra�cheur', 'Signature'],
         prepTimeRange: [12, 20],
       },
       {
         title: 'Saint-Jacques Saisies',
-        caption: 'Cuisson nacrée et purée de saison.',
+        caption: 'Cuisson nacr�e et pur�e de saison.',
         mood: 'Date',
         vegan: false,
         ingredients: ['saint-jacques', 'beurre', 'panais'],
         allergens: ['mollusques', 'lait'],
-        tags: ['Premium', 'Délicat'],
+        tags: ['Premium', 'D�licat'],
         prepTimeRange: [16, 26],
       },
       {
         title: 'Bouillabaisse Moderne',
-        caption: 'Interprétation contemporaine d’un classique iodé.',
+        caption: 'Interpr�tation contemporaine d�un classique iod�.',
         mood: 'Family',
         vegan: false,
         ingredients: ['poisson', 'safran', 'fenouil', 'tomate'],
@@ -372,12 +372,12 @@ function cuisineTemplates(cuisineType: string): DishTemplate[] {
       },
       {
         title: 'Ceviche du Jour',
-        caption: 'Poisson mariné minute, touche pimentée et herbacée.',
+        caption: 'Poisson marin� minute, touche piment�e et herbac�e.',
         mood: 'Festif',
         vegan: false,
         ingredients: ['poisson', 'citron vert', 'oignon rouge', 'piment'],
         allergens: ['poisson'],
-        tags: ['Acidulé', 'À partager'],
+        tags: ['Acidul�', '� partager'],
         prepTimeRange: [10, 18],
       },
     ];
@@ -385,8 +385,8 @@ function cuisineTemplates(cuisineType: string): DishTemplate[] {
 
   return [
     {
-      title: 'Menu Dégustation Signature',
-      caption: 'Sélection en plusieurs services autour des produits de saison.',
+      title: 'Menu D�gustation Signature',
+      caption: 'S�lection en plusieurs services autour des produits de saison.',
       mood: 'Date',
       vegan: false,
       ingredients: ['produits de saison', 'herbes', 'fonds maison'],
@@ -395,33 +395,33 @@ function cuisineTemplates(cuisineType: string): DishTemplate[] {
       prepTimeRange: [25, 45],
     },
     {
-      title: 'Plat du Marché',
-      caption: 'Interprétation quotidienne inspirée du marché local.',
+      title: 'Plat du March�',
+      caption: 'Interpr�tation quotidienne inspir�e du march� local.',
       mood: 'Family',
       vegan: false,
-      ingredients: ['légumes', 'protéine', 'épices'],
+      ingredients: ['l�gumes', 'prot�ine', '�pices'],
       allergens: ['gluten'],
       tags: ['Saisonnier', 'Convivial'],
       prepTimeRange: [18, 32],
     },
     {
-      title: 'Assiette Végétale',
-      caption: 'Focus légumes, textures variées et assaisonnement précis.',
+      title: 'Assiette V�g�tale',
+      caption: 'Focus l�gumes, textures vari�es et assaisonnement pr�cis.',
       mood: 'Healthy',
       vegan: true,
-      ingredients: ['légumes', 'graines', 'vinaigre'],
-      allergens: ['sésame'],
-      tags: ['Vegan', 'Équilibré'],
+      ingredients: ['l�gumes', 'graines', 'vinaigre'],
+      allergens: ['s�same'],
+      tags: ['Vegan', '�quilibr�'],
       prepTimeRange: [14, 24],
     },
     {
-      title: 'Création du Chef',
-      caption: 'Plat emblématique de la maison avec dressage soigné.',
+      title: 'Cr�ation du Chef',
+      caption: 'Plat embl�matique de la maison avec dressage soign�.',
       mood: 'Festif',
       vegan: false,
-      ingredients: ['ingrédients maison', 'sauce', 'aromates'],
+      ingredients: ['ingr�dients maison', 'sauce', 'aromates'],
       allergens: ['lait'],
-      tags: ['Premium', 'Créatif'],
+      tags: ['Premium', 'Cr�atif'],
       prepTimeRange: [20, 36],
     },
   ];
@@ -465,7 +465,7 @@ async function scrapeRestaurants(maxPages: number): Promise<ScrapedRestaurant[]>
       const html = await fetchListPage(page);
       const cards = splitCards(html);
       if (cards.length === 0) {
-        console.log(`Page ${page}: aucune carte, arrêt.`);
+        console.log(`Page ${page}: aucune carte, arr�t.`);
         break;
       }
 
@@ -482,7 +482,7 @@ async function scrapeRestaurants(maxPages: number): Promise<ScrapedRestaurant[]>
       console.log(`Page ${page}: ${cards.length} cartes, ${pageInserted} restaurants uniques.`);
 
       if (pageInserted === 0) {
-        console.log('Aucun nouveau restaurant trouvé, arrêt de la pagination.');
+        console.log('Aucun nouveau restaurant trouv�, arr�t de la pagination.');
         break;
       }
     } catch (error: any) {
@@ -496,7 +496,7 @@ async function scrapeRestaurants(maxPages: number): Promise<ScrapedRestaurant[]>
 
 async function upsertDataset(restaurants: ScrapedRestaurant[], perRestaurant: number, wipe: boolean) {
   if (wipe) {
-    console.log('Suppression du jeu de données existant (restaurants/plats)...');
+    console.log('Suppression du jeu de donn�es existant (restaurants/plats)...');
     await prisma.dish.deleteMany();
     await prisma.restaurantHoraire.deleteMany();
     await prisma.restaurant.deleteMany();
@@ -559,7 +559,7 @@ async function upsertDataset(restaurants: ScrapedRestaurant[], perRestaurant: nu
     dishCount += dishes.length;
   }
 
-  console.log(`Import terminé: ${restaurantCount} restaurants, ${dishCount} plats.`);
+  console.log(`Import termin�: ${restaurantCount} restaurants, ${dishCount} plats.`);
 }
 
 async function main() {
@@ -572,10 +572,10 @@ async function main() {
 
   console.log(`Scraping Michelin: ${maxPages} pages max, ${perRestaurant} plats/restaurant.`);
   const restaurants = await scrapeRestaurants(maxPages);
-  console.log(`Restaurants uniques collectés: ${restaurants.length}`);
+  console.log(`Restaurants uniques collect�s: ${restaurants.length}`);
 
   if (restaurants.length === 0) {
-    throw new Error('Aucun restaurant collecté.');
+    throw new Error('Aucun restaurant collect�.');
   }
 
   await upsertDataset(restaurants, perRestaurant, !noWipe);

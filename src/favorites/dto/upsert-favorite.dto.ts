@@ -12,7 +12,7 @@ export class UpsertFavoriteDto {
   @IsNotEmpty()
   dishTitle!: string;
 
-  @ApiProperty({ example: 'Bouillon longuement rÃƒÂ©duit, noodles fraÃƒÂ®ches, Ã…â€œuf marinÃƒÂ©' })
+  @ApiProperty({ example: 'Bouillon longuement réduit, noodles fraîches, œuf mariné' })
   @IsString()
   @IsNotEmpty()
   dishCaption!: string;
