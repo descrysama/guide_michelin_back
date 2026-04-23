@@ -8,6 +8,9 @@ RUN apk add --no-cache python3 make g++
 COPY package*.json ./
 RUN npm ci
 
+COPY prisma ./prisma
+RUN npx prisma generate
+
 COPY . .
 RUN npm run build
 
@@ -22,9 +25,8 @@ RUN apk add --no-cache python3 make g++
 COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
-# Si tu utilises Prisma, copie le schema et génère le client
-# COPY prisma ./prisma
-# RUN npx prisma generate
+COPY prisma ./prisma
+RUN npx prisma generate
 
 COPY --from=builder /app/dist ./dist
 
