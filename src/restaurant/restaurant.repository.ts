@@ -25,6 +25,26 @@ export type RestaurantWithHoraires = {
   }[];
 };
 
+const RESTAURANT_TEXT_FIXES: Record<string, string> = {
+  'M�re Brazier': 'Mère Brazier',
+  '33 Rue du B�uf, 69005 Lyon': '33 Rue du Bœuf, 69005 Lyon',
+  'Le Neuvi�me Art': 'Le Neuvième Art',
+  'T�tedoie': 'Têtedoie',
+  '14 Mont�e du Chemin Neuf, 69005 Lyon': '14 Montée du Chemin Neuf, 69005 Lyon',
+  '23 Rue de S�ze, 69006 Lyon': '23 Rue de Sèze, 69006 Lyon',
+  '3 Place Kl�ber, 69006 Lyon': '3 Place Kléber, 69006 Lyon',
+  'Le B�naton': 'Le Bénaton',
+  '25 Faubourg Bretonni�re, 21200 Beaune': '25 Faubourg Bretonnière, 21200 Beaune',
+  "10 Rue de l'H�tel-Dieu, 21200 Beaune": "10 Rue de l'Hôtel-Dieu, 21200 Beaune",
+  'Place du March�, 01540 Vonnas': 'Place du Marché, 01540 Vonnas',
+  '19 Quai Jean Jaur�s, 71000 M�con': '19 Quai Jean Jaurès, 71000 Mâcon',
+  '2 All�e du Parc, 71850 Charnay-l�s-M�con': '2 Allée du Parc, 71850 Charnay-lès-Mâcon',
+};
+
+function fixRestaurantText(value: string): string {
+  return RESTAURANT_TEXT_FIXES[value] ?? value;
+}
+
 // Distance minimale (km) d'un point à un segment de droite (approximation planaire avec correction cosinus)
 function pointToSegmentKm(
   pLat: number, pLng: number,
@@ -74,6 +94,8 @@ export class RestaurantRepository {
   private parseRestaurant(raw: any, distance?: number): RestaurantWithHoraires {
     return {
       ...raw,
+      nom: fixRestaurantText(raw.nom),
+      adresse: fixRestaurantText(raw.adresse),
       imageUrls: JSON.parse(raw.imageUrls) as string[],
       distance,
       horaires: raw.horaires.map((h: any) => ({
