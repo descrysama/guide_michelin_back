@@ -6,6 +6,7 @@ import { UpsertFavoriteDto } from './dto/upsert-favorite.dto';
 import { FavoritesService } from './favorites.service';
 import { UpsertRestaurantFavoriteDto } from './dto/upsert-restaurant-favorite.dto';
 import { UpsertHotelFavoriteDto } from './dto/upsert-hotel-favorite.dto';
+import { UpsertExperienceFavoriteDto } from './dto/upsert-experience-favorite.dto';
 
 @ApiTags('Favorites')
 @ApiBearerAuth()
@@ -36,6 +37,11 @@ export class FavoritesController {
     return this.favoritesService.listHotelFavoritesForUser((req.user as any).id);
   }
 
+  @Get('experiences')
+  async listExperiences(@Req() req: Request) {
+    return this.favoritesService.listExperienceFavoritesForUser((req.user as any).id);
+  }
+
   @Get(':dishId')
   @ApiOperation({ summary: 'Get one favorite dish by dish id' })
   @ApiResponse({ status: 200, description: 'Favorite retrieved successfully' })
@@ -63,6 +69,12 @@ export class FavoritesController {
     return this.favoritesService.upsertHotel((req.user as any).id, dto);
   }
 
+  @Post('experiences')
+  @ApiBody({ type: UpsertExperienceFavoriteDto })
+  async upsertExperience(@Req() req: Request, @Body(ValidationPipe) dto: UpsertExperienceFavoriteDto) {
+    return this.favoritesService.upsertExperience((req.user as any).id, dto);
+  }
+
   @Patch(':dishId/extend')
   @ApiOperation({ summary: 'Extend favorite expiration by 24h' })
   @ApiResponse({ status: 200, description: 'Favorite extended successfully' })
@@ -80,6 +92,11 @@ export class FavoritesController {
     return this.favoritesService.deleteHotel((req.user as any).id, hotelKey);
   }
 
+  @Delete('experiences/:experienceId')
+  async deleteExperience(@Req() req: Request, @Param('experienceId') experienceId: string) {
+    return this.favoritesService.deleteExperience((req.user as any).id, experienceId);
+  }
+
   @Delete()
   @ApiOperation({ summary: 'Clear all dish favorites for current user' })
   @ApiResponse({ status: 200, description: 'Favorites cleared successfully' })
@@ -95,6 +112,11 @@ export class FavoritesController {
   @Delete('hotels')
   async clearHotels(@Req() req: Request) {
     return this.favoritesService.clearHotels((req.user as any).id);
+  }
+
+  @Delete('experiences')
+  async clearExperiences(@Req() req: Request) {
+    return this.favoritesService.clearExperiences((req.user as any).id);
   }
 
   @Delete(':dishId')

@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { experiences } from './data/experiences';
 
 const prisma = new PrismaClient();
 
@@ -15,7 +16,7 @@ type RestaurantSeed = {
 };
 
 const restaurants: RestaurantSeed[] = [
-  // ─── Lyon — 3 étoiles ────────────────────────────────────────
+  // --- Lyon � 3 �toiles ----------------------------------------
   {
     nom: 'Paul Bocuse',
     adresse: '40 Rue de la Plage, 69660 Collonges-au-Mont-d\'Or',
@@ -38,9 +39,9 @@ const restaurants: RestaurantSeed[] = [
     ] satisfies Horaire[],
   },
 
-  // ─── Lyon — 2 étoiles ────────────────────────────────────────
+  // --- Lyon � 2 �toiles ----------------------------------------
   {
-    nom: 'Mère Brazier',
+    nom: 'M�re Brazier',
     adresse: '12 Rue Royale, 69001 Lyon',
     distinction: 2,
     latitude: 45.7679,
@@ -60,7 +61,7 @@ const restaurants: RestaurantSeed[] = [
   },
   {
     nom: 'Takao Takano',
-    adresse: '33 Rue du Bœuf, 69005 Lyon',
+    adresse: '33 Rue du B�uf, 69005 Lyon',
     distinction: 2,
     latitude: 45.7620,
     longitude: 4.8281,
@@ -77,7 +78,7 @@ const restaurants: RestaurantSeed[] = [
     ] satisfies Horaire[],
   },
   {
-    nom: 'Le Neuvième Art',
+    nom: 'Le Neuvi�me Art',
     adresse: '173 Rue Cuvier, 69006 Lyon',
     distinction: 2,
     latitude: 45.7699,
@@ -96,10 +97,10 @@ const restaurants: RestaurantSeed[] = [
     ] satisfies Horaire[],
   },
 
-  // ─── Lyon — 1 étoile ─────────────────────────────────────────
+  // --- Lyon � 1 �toile -----------------------------------------
   {
-    nom: 'Têtedoie',
-    adresse: '14 Montée du Chemin Neuf, 69005 Lyon',
+    nom: 'T�tedoie',
+    adresse: '14 Mont�e du Chemin Neuf, 69005 Lyon',
     distinction: 1,
     latitude: 45.7619,
     longitude: 4.8175,
@@ -135,7 +136,7 @@ const restaurants: RestaurantSeed[] = [
   },
   {
     nom: 'Les Apothicaires',
-    adresse: '23 Rue de Sèze, 69006 Lyon',
+    adresse: '23 Rue de S�ze, 69006 Lyon',
     distinction: 1,
     latitude: 45.7736,
     longitude: 4.8467,
@@ -153,7 +154,7 @@ const restaurants: RestaurantSeed[] = [
   },
   {
     nom: 'Pierre Orsi',
-    adresse: '3 Place Kléber, 69006 Lyon',
+    adresse: '3 Place Kl�ber, 69006 Lyon',
     distinction: 1,
     latitude: 45.7741,
     longitude: 4.8460,
@@ -208,7 +209,7 @@ const restaurants: RestaurantSeed[] = [
     ] satisfies Horaire[],
   },
 
-  // ─── Beaune & alentours (Côte-d'Or) ─────────────────────────
+  // --- Beaune & alentours (C�te-d'Or) -------------------------
   {
     nom: 'Maison Lameloise',
     adresse: '36 Place d\'Armes, 71150 Chagny',
@@ -249,8 +250,8 @@ const restaurants: RestaurantSeed[] = [
     ] satisfies Horaire[],
   },
   {
-    nom: 'Le Bénaton',
-    adresse: '25 Faubourg Bretonnière, 21200 Beaune',
+    nom: 'Le B�naton',
+    adresse: '25 Faubourg Bretonni�re, 21200 Beaune',
     distinction: 1,
     latitude: 47.0258,
     longitude: 4.8456,
@@ -268,7 +269,7 @@ const restaurants: RestaurantSeed[] = [
   },
   {
     nom: 'Le Jardin des Remparts',
-    adresse: '10 Rue de l\'Hôtel-Dieu, 21200 Beaune',
+    adresse: '10 Rue de l\'H�tel-Dieu, 21200 Beaune',
     distinction: 1,
     latitude: 47.0271,
     longitude: 4.8368,
@@ -322,10 +323,10 @@ const restaurants: RestaurantSeed[] = [
     ] satisfies Horaire[],
   },
 
-  // ─── Mâcon & alentours ───────────────────────────────────────
+  // --- M�con & alentours ---------------------------------------
   {
     nom: 'Georges Blanc',
-    adresse: 'Place du Marché, 01540 Vonnas',
+    adresse: 'Place du March�, 01540 Vonnas',
     distinction: 3,
     latitude: 46.2533,
     longitude: 4.9875,
@@ -344,7 +345,7 @@ const restaurants: RestaurantSeed[] = [
   },
   {
     nom: 'L\'Ambroisie',
-    adresse: '19 Quai Jean Jaurès, 71000 Mâcon',
+    adresse: '19 Quai Jean Jaur�s, 71000 M�con',
     distinction: 1,
     latitude: 46.3071,
     longitude: 4.8296,
@@ -362,7 +363,7 @@ const restaurants: RestaurantSeed[] = [
   },
   {
     nom: 'Le Poisson d\'Or',
-    adresse: '2 Allée du Parc, 71850 Charnay-lès-Mâcon',
+    adresse: '2 All�e du Parc, 71850 Charnay-l�s-M�con',
     distinction: 1,
     latitude: 46.2871,
     longitude: 4.8153,
@@ -398,9 +399,63 @@ const restaurants: RestaurantSeed[] = [
   },
 ];
 
+async function ensureExperienceSchema() {
+  await prisma.$executeRawUnsafe(`
+    CREATE TABLE IF NOT EXISTS "experiences" (
+      "id" TEXT NOT NULL PRIMARY KEY,
+      "title" TEXT NOT NULL,
+      "imageUrl" TEXT NOT NULL,
+      "locationName" TEXT NOT NULL,
+      "address" TEXT NOT NULL,
+      "city" TEXT NOT NULL,
+      "country" TEXT NOT NULL,
+      "latitude" REAL NOT NULL,
+      "longitude" REAL NOT NULL,
+      "priceEur" INTEGER NOT NULL,
+      "description" TEXT NOT NULL,
+      "category" TEXT NOT NULL,
+      "duration" TEXT NOT NULL,
+      "bookingUrl" TEXT NOT NULL,
+      "sourceUrl" TEXT,
+      "isFeatured" BOOLEAN NOT NULL DEFAULT false,
+      "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      "updatedAt" DATETIME NOT NULL
+    )
+  `);
+  await prisma.$executeRawUnsafe(
+    'CREATE INDEX IF NOT EXISTS "experiences_city_idx" ON "experiences"("city")',
+  );
+  await prisma.$executeRawUnsafe(
+    'CREATE INDEX IF NOT EXISTS "experiences_category_idx" ON "experiences"("category")',
+  );
+  await prisma.$executeRawUnsafe(`
+    CREATE TABLE IF NOT EXISTS "user_experience_favorites" (
+      "id" TEXT NOT NULL PRIMARY KEY,
+      "userId" TEXT NOT NULL,
+      "experienceId" TEXT NOT NULL,
+      "experienceTitle" TEXT NOT NULL,
+      "experienceImage" TEXT NOT NULL,
+      "experienceCity" TEXT NOT NULL,
+      "experiencePrice" INTEGER NOT NULL,
+      "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      "updatedAt" DATETIME NOT NULL,
+      CONSTRAINT "user_experience_favorites_userId_fkey"
+        FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+      CONSTRAINT "user_experience_favorites_experienceId_fkey"
+        FOREIGN KEY ("experienceId") REFERENCES "experiences" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    )
+  `);
+  await prisma.$executeRawUnsafe(
+    'CREATE UNIQUE INDEX IF NOT EXISTS "user_experience_favorites_userId_experienceId_key" ON "user_experience_favorites"("userId", "experienceId")',
+  );
+}
+
 async function main() {
   console.log('Seeding restaurants...');
+  await ensureExperienceSchema();
 
+  await prisma.$executeRawUnsafe('DELETE FROM "user_experience_favorites"');
+  await prisma.$executeRawUnsafe('DELETE FROM "experiences"');
   await prisma.restaurantHoraire.deleteMany();
   await prisma.restaurant.deleteMany();
 
@@ -421,10 +476,38 @@ async function main() {
         },
       },
     });
-    console.log(`  ✓ ${data.distinction}⭐ ${restaurant.nom}`);
+    console.log(`  ? ${data.distinction}? ${restaurant.nom}`);
   }
 
-  console.log(`\nDone — ${restaurants.length} restaurants créés.`);
+  for (const data of experiences) {
+    const now = new Date().toISOString();
+    const id = `exp_${Math.random().toString(36).slice(2, 10)}`;
+    await prisma.$executeRawUnsafe(
+      `INSERT INTO "experiences" ("id","title","imageUrl","locationName","address","city","country","latitude","longitude","priceEur","description","category","duration","bookingUrl","sourceUrl","isFeatured","createdAt","updatedAt")
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      id,
+      data.title,
+      data.imageUrl,
+      data.locationName,
+      data.address,
+      data.city,
+      data.country,
+      data.latitude,
+      data.longitude,
+      data.priceEur,
+      data.description,
+      data.category,
+      data.duration,
+      data.bookingUrl,
+      data.sourceUrl ?? null,
+      data.isFeatured ? 1 : 0,
+      now,
+      now,
+    );
+    console.log(`  ? exp�rience ${data.title}`);
+  }
+
+  console.log(`\nDone � ${restaurants.length} restaurants et ${experiences.length} exp�riences cr��s.`);
 }
 
 main()

@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+﻿import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpsertFavoriteDto } from './dto/upsert-favorite.dto';
 import { UpsertRestaurantFavoriteDto } from './dto/upsert-restaurant-favorite.dto';
 import { UpsertHotelFavoriteDto } from './dto/upsert-hotel-favorite.dto';
+import { UpsertExperienceFavoriteDto } from './dto/upsert-experience-favorite.dto';
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const makeId = () => `fav_${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
@@ -47,6 +48,13 @@ export class FavoritesService {
   async listHotelFavoritesForUser(userId: string) {
     return this.prisma.$queryRawUnsafe(
       'SELECT * FROM "user_hotel_favorites" WHERE "userId" = ? ORDER BY "updatedAt" DESC',
+      userId,
+    );
+  }
+
+  async listExperienceFavoritesForUser(userId: string) {
+    return this.prisma.$queryRawUnsafe(
+      'SELECT * FROM "user_experience_favorites" WHERE "userId" = ? ORDER BY "updatedAt" DESC',
       userId,
     );
   }
@@ -148,6 +156,34 @@ export class FavoritesService {
     return { ok: true };
   }
 
+  async upsertExperience(userId: string, dto: UpsertExperienceFavoriteDto) {
+    const rows = (await this.prisma.$queryRawUnsafe(
+      'SELECT * FROM "experiences" WHERE "id" = ? LIMIT 1',
+      dto.experienceId,
+    )) as any[];
+    const experience = rows[0];
+    if (!experience) throw new NotFoundException('Expérience introuvable');
+
+    const now = new Date().toISOString();
+    await this.prisma.$executeRawUnsafe(
+      `INSERT INTO "user_experience_favorites" ("id","userId","experienceId","experienceTitle","experienceImage","experienceCity","experiencePrice","createdAt","updatedAt")
+       VALUES (?,?,?,?,?,?,?,?,?)
+       ON CONFLICT("userId","experienceId")
+       DO UPDATE SET "experienceTitle" = excluded."experienceTitle", "experienceImage" = excluded."experienceImage", "experienceCity" = excluded."experienceCity", "experiencePrice" = excluded."experiencePrice", "updatedAt" = excluded."updatedAt"`,
+      makeId(),
+      userId,
+      experience.id,
+      experience.title,
+      experience.imageUrl,
+      experience.city,
+      experience.priceEur,
+      now,
+      now,
+    );
+
+    return { ok: true };
+  }
+
   async extend(userId: string, dishId: string) {
     const favorite = await this.getOne(userId, dishId);
     const now = Date.now();
@@ -162,9 +198,7 @@ export class FavoritesService {
 
   async deleteOne(userId: string, dishId: string) {
     await this.getOne(userId, dishId);
-    await this.prisma.userDishFavorite.delete({
-      where: { userId_dishId: { userId, dishId } },
-    });
+    await this.prisma.userDishFavorite.delete({ where: { userId_dishId: { userId, dishId } } });
     return { message: 'Favori supprimé' };
   }
 
@@ -186,6 +220,15 @@ export class FavoritesService {
     return { message: 'Hôtel favori supprimé' };
   }
 
+  async deleteExperience(userId: string, experienceId: string) {
+    await this.prisma.$executeRawUnsafe(
+      'DELETE FROM "user_experience_favorites" WHERE "userId" = ? AND "experienceId" = ?',
+      userId,
+      experienceId,
+    );
+    return { message: 'Expérience favorite supprimée' };
+  }
+
   async clear(userId: string) {
     await this.prisma.userDishFavorite.deleteMany({ where: { userId } });
     return { message: 'Liste des favoris plats vidée' };
@@ -199,5 +242,10 @@ export class FavoritesService {
   async clearHotels(userId: string) {
     await this.prisma.$executeRawUnsafe('DELETE FROM "user_hotel_favorites" WHERE "userId" = ?', userId);
     return { message: 'Liste des favoris hôtels vidée' };
+  }
+
+  async clearExperiences(userId: string) {
+    await this.prisma.$executeRawUnsafe('DELETE FROM "user_experience_favorites" WHERE "userId" = ?', userId);
+    return { message: 'Liste des favoris expériences vidée' };
   }
 }

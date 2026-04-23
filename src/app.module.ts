@@ -7,9 +7,10 @@ import { FavoritesModule } from './favorites/favorites.module';
 import { UserModule } from './user/user.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { DishModule } from './dish/dish.module';
+import { ExperienceModule } from './experience/experience.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UserModule, RestaurantModule, FavoritesModule, DishModule],
+  imports: [PrismaModule, AuthModule, UserModule, RestaurantModule, FavoritesModule, DishModule, ExperienceModule],
   controllers: [AppController],
   providers: [AppService],
 })
